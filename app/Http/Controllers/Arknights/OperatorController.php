@@ -6,10 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\Arknights\Operators;
 use App\Models\Arknights\RecruitmentTags;
 use Illuminate\Http\Request;
+use PHPUnit\Framework\Constraint\Operator;
 
 class OperatorController extends Controller
 {
-    // 완료
+    // 검색용 태그 리스트 setting
     public function setRecruitmentTagList() {
         $recruitmentOpList = [
             "FO03",
@@ -233,21 +234,100 @@ class OperatorController extends Controller
         return $allOpList;
     }
 
+    // Card 이미지 setting
     public function setDefaultCardImg()
     {
         $allOpList = Operators::all();
         foreach($allOpList as $op) {
             $defaultCardImg = env('AWS_CLOUDFRONT_S3_URL').'/portraits/'.substr($op->potentialItemId,2).'_1.png';
-            Operators::where('_id', $op->_id)->update([
-                'default_card_img'=>$defaultCardImg
-            ],['upsert'=>true]);
+            if($op->potentialItemId) {
+                Operators::where('_id', $op->_id)->update([
+                    'default_card_img'=>$defaultCardImg
+                ],['upsert'=>true]);
+            } else {
+                Operators::where('_id', $op->_id)->update([
+                    'default_card_img'=>null
+                ],['upsert'=>true]);
+            }
+            
         }
 
         return true;
+    }
+
+    // avatar 이미지 setting
+    public function setAvartarImg() {
+        $allOpList = Operators::all();
+        foreach($allOpList as $op) {
+            $defaultCardImg = env('AWS_CLOUDFRONT_S3_URL').'/avatars/'.substr($op->potentialItemId,2).'.png';
+            if($op->potentialItemId) {
+                Operators::where('_id', $op->_id)->update([
+                    'default_avartar_img'=>$defaultCardImg
+                ],['upsert'=>true]);
+            } else {
+                Operators::where('_id', $op->_id)->update([
+                    'default_avartar_img'=>null
+                ],['upsert'=>true]);
+            }
+            
+        }
+
+        return true;
+    }
+
+    public function setPotentialItemId() {
+        // MN01 :: p_char_159_peacok
+        // YD09 :: p_char_4019_ncdeer
+        Operators::where('displayNumber', 'YD09')
+        ->update([
+            'potentialItemId'=>'p_char_4019_ncdeer'
+        ]);
+
+        Operators::where('displayNumber', 'MN01')
+        ->update([
+            'potentialItemId'=>'p_char_159_peacok'
+        ]);
     }
 
     // 공개모집 가능한 얘들 가져오기
     public function getRecruitmentOp() {
         return Operators::select('name', 'rarity', 'isRecruitment', 'recruitmentTagCodeList','default_card_img')->where('isRecruitment', true)->get();
     }
+
+    // 이름 검색? 병과 검색 등이 들어 갈 수 있다
+    public function searchOperator(Request $request) {
+        $query = Operators::select('name', 'rarity', 'profession', 'default_avartar_img')->whereNotNull ('displayNumber');
+        
+        $query = $query->where(function ($q) use ($request) {
+            if($request->name) {
+                $q->where('name','like','%'.$request->name.'%');
+            }
+
+            if($request->rarity) {
+
+                $tempRarity = [];
+                foreach($request->rarity as $rarity) {
+                    array_push($tempRarity, intval($rarity));
+                }
+
+                $q->whereIn('rarity', $tempRarity);
+            }
+
+            if($request->profession) {
+                $q->whereIn('profession', $request->profession);
+            }
+        });
+
+        return $query->paginate(
+            $perPage=20
+        );
+    }
+
+    public function getOperator($id)
+    {
+        $operator = Operators::select('*')->where('_id', $id)->first();
+        return $operator;
+    }
+
+    
 }

@@ -20,16 +20,21 @@ use App\Http\Controllers\Arknights\OperatorController;
 
 
 
-// Route::get('/set',[OperatorController::class,'setDefaultCardImg']);
+// Route::get('/set',[OperatorController::class,'setAvartarImg']);
 
 Route::prefix('/recruitment')->group(function() {
     // SET Op Tag List
     // Route::get('/set',[OperatorController::class,'setRecruitmentTagList']);
-    Route::get('/op/list',[OperatorController::class,'getRecruitmentOp']);
     
-
+    Route::get('/op/list',[OperatorController::class,'getRecruitmentOp']);
     Route::get('/tag/list',[RecruitmentTagController::class,'all']);
     
+});
+
+Route::prefix('/operator')->group(function() {
+    Route::get('/test', [OperatorController::class,'setAvartarImg']);
+    Route::get('/list', [OperatorController::class,'searchOperator']);
+    Route::get('/{op}', [OperatorController::class,'getOperator']);
 });
 
 Route::prefix('user')->group(function() {
