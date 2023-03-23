@@ -296,7 +296,8 @@ class OperatorController extends Controller
 
     // 이름 검색? 병과 검색 등이 들어 갈 수 있다
     public function searchOperator(Request $request) {
-        $query = Operators::select('name', 'rarity', 'profession', 'default_avartar_img')->whereNotNull ('displayNumber');
+        $query = Operators::select('name', 'rarity', 'profession', 'default_avartar_img')->whereNotNull ('displayNumber')
+        ->orderBy('rarity','desc');
         
         $query = $query->where(function ($q) use ($request) {
             if($request->name) {

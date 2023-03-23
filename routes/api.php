@@ -32,7 +32,7 @@ Route::prefix('/recruitment')->group(function() {
 });
 
 Route::prefix('/operator')->group(function() {
-    Route::get('/test', [OperatorController::class,'setAvartarImg']);
+    // Route::get('/test', [OperatorController::class,'setAvartarImg']);
     Route::get('/list', [OperatorController::class,'searchOperator']);
     Route::get('/{op}', [OperatorController::class,'getOperator']);
 });
