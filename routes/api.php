@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Auth\ApiAuthController;
 use App\Http\Controllers\Arknights\RecruitmentTagController;
 use App\Http\Controllers\Arknights\OperatorController;
-
+use App\Http\Controllers\Arknights\SetDataController;
 
 /*
 |--------------------------------------------------------------------------
@@ -20,12 +20,9 @@ use App\Http\Controllers\Arknights\OperatorController;
 
 
 
-// Route::get('/set',[OperatorController::class,'setAvartarImg']);
+// Route::get('/test',[SetDataController::class,'setItem']);
 
 Route::prefix('/recruitment')->group(function() {
-    // SET Op Tag List
-    // Route::get('/set',[OperatorController::class,'setRecruitmentTagList']);
-    
     Route::get('/op/list',[OperatorController::class,'getRecruitmentOp']);
     Route::get('/tag/list',[RecruitmentTagController::class,'all']);
     

@@ -327,6 +327,9 @@ class OperatorController extends Controller
     public function getOperator($id)
     {
         $operator = Operators::select('*')->where('_id', $id)->first();
+        // 세팅 해야 되는 거.. Skin 정보 + 재료 정보
+        // 정예화 , 스킬 정보는 세팅 되어 있음
+        // 재능도 있음
         return $operator;
     }
 
