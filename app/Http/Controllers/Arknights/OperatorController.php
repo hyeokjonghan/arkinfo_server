@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Arknights;
 
 use App\Http\Controllers\Controller;
+use App\Models\Arknights\CharSkin;
 use App\Models\Arknights\Operators;
+use App\Models\Arknights\Range;
 use App\Models\Arknights\RecruitmentTags;
 use Illuminate\Http\Request;
 use PHPUnit\Framework\Constraint\Operator;
@@ -324,13 +326,19 @@ class OperatorController extends Controller
         );
     }
 
-    public function getOperator($id)
+    public function getOperator(Operators $id)
     {
-        $operator = Operators::select('*')->where('_id', $id)->first();
-        // 세팅 해야 되는 거.. Skin 정보 + 재료 정보
-        // 정예화 , 스킬 정보는 세팅 되어 있음
-        // 재능도 있음
+        $operator = $id;
+
+        $rangeList = [];
+        foreach($operator->phases as $phases) {
+            array_push($rangeList, $phases['rangeId']);
+        }
+        $operator->rangeInfo = Range::select('*')->whereIn('id', $rangeList)->get();
+
+        $operator->skinInfo = CharSkin::select('*')->where('charId', substr($operator->potentialItemId,2))->orderBy('displaySkin.sortId', 'asc')->get();
         return $operator;
+        
     }
 
     

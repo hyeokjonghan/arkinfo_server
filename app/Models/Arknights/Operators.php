@@ -8,5 +8,5 @@ use Jenssegers\Mongodb\Eloquent\Model;
 class Operators extends Model
 {
     protected $connection = 'mongodb';
-    protected $primaryKey = 'id';
+    protected $primaryKey = '_id';
 }
