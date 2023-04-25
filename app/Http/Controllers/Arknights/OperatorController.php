@@ -152,8 +152,6 @@ class OperatorController extends Controller
         // PIONEER(뱅가드) : 8,
         // CASTER(캐스터) : 12,
         // SUPPORT(서포터) : 9
-
-        // 자동 배포 확인
         
         foreach($allOpList as $operator) {
 
