@@ -153,7 +153,7 @@ class OperatorController extends Controller
         // CASTER(캐스터) : 12,
         // SUPPORT(서포터) : 9
 
-        // Ansible GitAction Test
+        // 최종확인
         
         foreach($allOpList as $operator) {
 
