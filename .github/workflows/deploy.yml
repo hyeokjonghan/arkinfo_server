@@ -13,9 +13,9 @@ jobs:
       # uses: dawidd6/action-ansible-playbook@5d970176ea4bfd99a3f5004d48e293fe0994eda1
       uses: appleboy/ssh-action@master
       with:
-        key: ${{ secret.SSH_KEY }}
-        host: ${{ secret.HOST }}
-        username: ${{ secret.USER }}
+        key: ${{ secrets.SSH_KEY }}
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USER }}
         script: |
           cd /etc/ansible/playbook
           ansible-playbook arkinfo-deploy-role.yml
