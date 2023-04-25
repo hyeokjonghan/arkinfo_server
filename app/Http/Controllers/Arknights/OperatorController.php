@@ -152,6 +152,8 @@ class OperatorController extends Controller
         // PIONEER(뱅가드) : 8,
         // CASTER(캐스터) : 12,
         // SUPPORT(서포터) : 9
+
+        // Ansible GitAction Test
         
         foreach($allOpList as $operator) {
 
