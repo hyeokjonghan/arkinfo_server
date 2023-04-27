@@ -8,6 +8,26 @@ jobs:
   deploy:
     runs-on: ubuntu-latest
     steps:
+    # GET GITHUB ACTION IP
+    - name: Get Github Actions IP
+      id: ip
+      uses: haythem/public-ip@v1.3
+      
+    # AWS IAM ACCESS
+    - name : AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v2
+      with:
+        aws-access-key-id: ${{ secrets.AWS_SECURITY_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECURITY_SECRECT_KEY }}
+        aws-region: ap-northeast-2
+        
+    # APPEND Github Action IP to Security group
+    - name : Append Github Action IP to Security group
+      run: |
+        aws ec2 authorize-security-group-ingress --group-id ${{ secrets.AWS_SG_ID }} --protocal tcp --port 22 --cidr ${{ steps.ip.outpus.ipv4 }}/32
+        
+        
+    # RUN Ansible
     - name: Run Ansible playbook
       # You may pin to the exact commit or the version.
       # uses: dawidd6/action-ansible-playbook@5d970176ea4bfd99a3f5004d48e293fe0994eda1
@@ -19,4 +39,9 @@ jobs:
         script: |
           cd /etc/ansible/playbooks
           ansible-playbook arkinfo-deploy-role.yml
+          
+    # Remove Github Action IP to Security group
+    - name: Remove Gihub Actinos IP to Security group
+      run: |
+        aws ec2 revoke-security-group-ingress --group-id ${{ secrets.AWS_SG_ID }} --protocal tcp --port 22 --cidr ${{ steps.ip.outpus.ipv4 }}/32
         
