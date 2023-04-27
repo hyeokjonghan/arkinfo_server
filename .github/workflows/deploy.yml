@@ -24,7 +24,7 @@ jobs:
     # APPEND Github Action IP to Security group
     - name : Append Github Action IP to Security group
       run: |
-        aws ec2 authorize-security-group-ingress --group-id ${{ secrets.AWS_SG_ID }} --protocal tcp --port 22 --cidr ${{ steps.ip.outpus.ipv4 }}/32
+        aws ec2 authorize-security-group-ingress --group-id ${{ secrets.AWS_SG_ID }} --protocol tcp --port 22 --cidr ${{ steps.ip.outpus.ipv4 }}/32
           
     - name: Run Ansible playbook
       uses: cross-the-world/ssh-pipeline@v1.2.0
@@ -39,5 +39,5 @@ jobs:
     # Remove Github Action IP to Security group
     - name: Remove Gihub Actinos IP to Security group
       run: |
-        aws ec2 revoke-security-group-ingress --group-id ${{ secrets.AWS_SG_ID }} --protocal tcp --port 22 --cidr ${{ steps.ip.outpus.ipv4 }}/32
+        aws ec2 revoke-security-group-ingress --group-id ${{ secrets.AWS_SG_ID }} --protocol tcp --port 22 --cidr ${{ steps.ip.outpus.ipv4 }}/32
         
