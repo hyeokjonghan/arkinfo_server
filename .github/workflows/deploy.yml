@@ -29,16 +29,26 @@ jobs:
         
     # RUN Ansible
     - name: Run Ansible playbook
-      # You may pin to the exact commit or the version.
-      # uses: dawidd6/action-ansible-playbook@5d970176ea4bfd99a3f5004d48e293fe0994eda1
-      uses: appleboy/ssh-action@master
+      uses: cross-the-world/ssh-pipeline@v1.2.0
       with:
         key: ${{ secrets.SSH_KEY }}
         host: ${{ secrets.HOST }}
-        username: ${{ secrets.USER }}
+        user: ${{ secrets.USER }}
         script: |
           cd /etc/ansible/playbooks
           ansible-playbook arkinfo-deploy-role.yml
+          
+    - name: Run Ansible playbook
+    # You may pin to the exact commit or the version.
+    # uses: cross-the-world/ssh-pipeline@7f022867934a210af826af99ef80d96f03a094d5
+      uses: cross-the-world/ssh-pipeline@v1.2.0
+      with:
+          key: ${{ secrets.SSH_KEY }}
+          host: ${{ secrets.HOST }}
+          user: ${{ secrets.USER }}
+          script: |
+            cd /etc/ansible/playbooks
+            ansible-playbook arkinfo-deploy-role.yml
           
     # Remove Github Action IP to Security group
     - name: Remove Gihub Actinos IP to Security group
