@@ -6,6 +6,8 @@ use App\Http\Controllers\Auth\ApiAuthController;
 use App\Http\Controllers\Arknights\RecruitmentTagController;
 use App\Http\Controllers\Arknights\OperatorController;
 use App\Http\Controllers\Arknights\SetDataController;
+use App\Http\Controllers\Arknights\BuildingController;
+use App\Http\Controllers\Arknights\ItemsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +24,8 @@ use App\Http\Controllers\Arknights\SetDataController;
 
 // Route::get('/test',[SetDataController::class,'setItem']);
 
+Route::get('/test', [BuildingController::class, 'getCharTest']);
+
 Route::prefix('/recruitment')->group(function() {
     Route::get('/op/list',[OperatorController::class,'getRecruitmentOp']);
     Route::get('/tag/list',[RecruitmentTagController::class,'all']);
@@ -32,6 +36,12 @@ Route::prefix('/operator')->group(function() {
     // Route::get('/test', [OperatorController::class,'setAvartarImg']);
     Route::get('/list', [OperatorController::class,'searchOperator']);
     Route::get('/{id}', [OperatorController::class,'getOperator']);
+
+    Route::get('/infra/{id}', [BuildingController::class, 'getBuildingCharBuff']); 
+});
+
+Route::prefix('/item')->group(function() {
+    Route::get('/search', [ItemsController::class, 'getItems']);
 });
 
 Route::prefix('user')->group(function() {
