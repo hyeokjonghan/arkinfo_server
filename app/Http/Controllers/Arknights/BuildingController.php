@@ -17,7 +17,13 @@ class BuildingController extends Controller
             $buffInfo = $charInfo->chars[$id]['buffChar'];
             $infraSkillList = array();
             foreach($buffInfo as $infra) {
-                $infraSkillList['buffs.'.$infra['buffData'][0]['buffId']] = 1;
+                if(count($infra['buffData']) > 0) {
+                    for($i = 0; $i < count($infra['buffData']); $i++) {
+                        $infraSkillList['buffs.'.$infra['buffData'][$i]['buffId']] = 1;
+                    }
+                    
+                }
+                
             }
             $infraSkillInfo = Buildings::project($infraSkillList)->first();
             $charInfo->infra = $infraSkillInfo['buffs'];
