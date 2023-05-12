@@ -21,10 +21,7 @@ use App\Http\Controllers\Arknights\ItemsController;
 */
 
 
-
-// Route::get('/test',[SetDataController::class,'setItem']);
-
-Route::get('/test', [SetDataController::class, 'setCharSync']);
+// Route::get('/test', [SetDataController::class, 'setCharSync']);
 
 Route::prefix('/recruitment')->group(function() {
     Route::get('/op/list',[OperatorController::class,'getRecruitmentOp']);
