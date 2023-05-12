@@ -28,7 +28,8 @@ class Kernel extends ConsoleKernel
 
 
         // 백업된 DB 삭제 처리
-        $schedule->exec('find ~/dump -mtime +6 -delete');
+        $schedule->exec('find ~/dump -mtime +6 -delete')
+        ->dailyAt('0:30');
     }
 
     /**
