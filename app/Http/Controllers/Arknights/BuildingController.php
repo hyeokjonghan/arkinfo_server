@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Validator;
 
 class BuildingController extends Controller
 {
+
     public function getBuildingCharBuff($id) {
         $charInfo = Buildings::project(['chars.'.$id => 1])->first();
         if(isset($charInfo->chars[$id])) {
