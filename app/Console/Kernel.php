@@ -15,7 +15,7 @@ class Kernel extends ConsoleKernel
     {
         $today = date("Y-m-d");
         // 백업, 10분뒤 동기화 처리
-        $schedule->exec('mongodump -d arknights_info -p ~/dump/'.$today)
+        $schedule->exec('mongodump -d arknights_info -o ~/dump/'.$today)
         ->dailyAt('0:00');
 
         $schedule->call(function() {
