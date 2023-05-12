@@ -18,7 +18,7 @@ class Kernel extends ConsoleKernel
         $schedule->exec('mongodump -d arknights_info -o ~/dump/'.$today)
         ->dailyAt('0:00');
 
-        $schedule->call(function() {
+        $schedule->job(function() {
             $setDataController = new SetDataController();
             $setDataController->setBuildingsSync();
             $setDataController->setItemSync();
