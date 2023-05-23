@@ -39,7 +39,7 @@ class SecretMapController extends Controller
             ],
             [
                 'map_id'=>1,
-                'item_code'=>65021010,  // 명파 (대)
+                'item_code'=>66130133,  // 명파 (대)
                 'drop_count'=>8
             ],
             [
@@ -66,7 +66,7 @@ class SecretMapController extends Controller
             ],
             [
                 'map_id'=>2,
-                'item_code'=>65021010,  // 명파 (대)
+                'item_code'=>66130133,  // 명파 (대)
                 'drop_count'=>8
             ],
             [
@@ -93,7 +93,7 @@ class SecretMapController extends Controller
             ],
             [
                 'map_id'=>3,
-                'item_code'=>65021010,  // 명파 (대)
+                'item_code'=>66130133,  // 명파 (대)
                 'drop_count'=>8
             ],
             [

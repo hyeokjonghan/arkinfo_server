@@ -28,7 +28,7 @@ class SetDataController extends Controller
 
     public function setRange()
     {
-        $rangeData = $this->curlController->getCURL(env('AWS_CLOUDFRONT_S3_URL').'/gamedata/ko_KR/'.env('LAST_DATA_UPDATED').'/excel/range_table.json');
+        $rangeData = $this->curlController->getCURL(env('AWS_CLOUDFRONT_S3_URL').'/gamedata/ko_KR/'.env('LAST_DATA_UPDATED').'/excel/range_table.json',[],[]);
         $rangeData = $rangeData['data'];
         $rangeData = json_decode($rangeData, true);
         foreach($rangeData as $range) {
@@ -38,7 +38,7 @@ class SetDataController extends Controller
     }
 
     public function setSkill() {
-        $skillData = $this->curlController->getCURL(env('AWS_CLOUDFRONT_S3_URL').'/gamedata/ko_KR/'.env('LAST_DATA_UPDATED').'/excel/skill_table.json');
+        $skillData = $this->curlController->getCURL(env('AWS_CLOUDFRONT_S3_URL').'/gamedata/ko_KR/'.env('LAST_DATA_UPDATED').'/excel/skill_table.json',[],[]);
         $skillData = $skillData['data'];
         $skillData = json_decode($skillData, true);
         foreach($skillData as $skill) {
@@ -50,7 +50,7 @@ class SetDataController extends Controller
     }
 
     public function setCharterSkin() {
-        $skinData = $this->curlController->getCURL(env('AWS_CLOUDFRONT_S3_URL').'/gamedata/ko_KR/'.env('LAST_DATA_UPDATED').'/excel/skin_table.json');
+        $skinData = $this->curlController->getCURL(env('AWS_CLOUDFRONT_S3_URL').'/gamedata/ko_KR/'.env('LAST_DATA_UPDATED').'/excel/skin_table.json',[],[]);
         $skinData = $skinData['data'];
         $skinData = json_decode($skinData, true);
         $skinData = $skinData['charSkins'];
@@ -61,7 +61,7 @@ class SetDataController extends Controller
     }
 
     public function setItem() {
-        $itemData = $this->curlController->getCURL(env('AWS_CLOUDFRONT_S3_URL').'/gamedata/ko_KR/'.env('LAST_DATA_UPDATED').'/excel/item_table.json');
+        $itemData = $this->curlController->getCURL(env('AWS_CLOUDFRONT_S3_URL').'/gamedata/ko_KR/'.env('LAST_DATA_UPDATED').'/excel/item_table.json',[],[]);
         $itemData = $itemData['data'];
         $itemData = json_decode($itemData, true);
         $itemData = $itemData['items'];
@@ -75,7 +75,7 @@ class SetDataController extends Controller
     // Building 데이터 동기화
     public function setBuildingsSync() {
         // 트랜잭션 시작
-        $jsonData = $this->curlController->getCURL("https://raw.githubusercontent.com/Kengxxiao/ArknightsGameData/master/ko_KR/gamedata/excel/building_data.json");
+        $jsonData = $this->curlController->getCURL("https://raw.githubusercontent.com/Kengxxiao/ArknightsGameData/master/ko_KR/gamedata/excel/building_data.json",[],[]);
         // 기존 데이터 delete
         DB::transaction(function () use ($jsonData) {
             Buildings::truncate();
@@ -87,7 +87,7 @@ class SetDataController extends Controller
 
     // 아이템 데이터 + 아이템 이미지 동기화
     public function setItemSync() {
-        $itemData = $this->curlController->getCURL("https://raw.githubusercontent.com/Kengxxiao/ArknightsGameData/master/ko_KR/gamedata/excel/item_table.json");
+        $itemData = $this->curlController->getCURL("https://raw.githubusercontent.com/Kengxxiao/ArknightsGameData/master/ko_KR/gamedata/excel/item_table.json",[],[]);
         
         $itemData = $itemData['data'];
         $itemData = json_decode($itemData, true);
@@ -106,7 +106,7 @@ class SetDataController extends Controller
             
             // 이미지 처리
             foreach($diffArray as $item) {
-                $data = $this->curlController->getCURL("https://raw.githubusercontent.com/Aceship/Arknight-Images/main/items/".$item['iconId'].".png");
+                $data = $this->curlController->getCURL("https://raw.githubusercontent.com/Aceship/Arknight-Images/main/items/".$item['iconId'].".png",[],[]);
                 $imageData = $data['data'];
                 $syncFailController = new SyncFailController();
                 if($data['code'] == '404') {
@@ -141,7 +141,7 @@ class SetDataController extends Controller
     }
 
     public function setOperatorKey () {
-        $charData = $this->curlController->getCURL("https://raw.githubusercontent.com/Kengxxiao/ArknightsGameData/master/ko_KR/gamedata/excel/character_table.json")['data'];
+        $charData = $this->curlController->getCURL("https://raw.githubusercontent.com/Kengxxiao/ArknightsGameData/master/ko_KR/gamedata/excel/character_table.json",[],[])['data'];
         $charData = json_decode($charData, true);
         $setData = [];
         foreach($charData as $key => $op) {
@@ -164,8 +164,8 @@ class SetDataController extends Controller
         // 이미지 없으면 가져 와야 함
         // 스킨 데이터 세팅 해야 함
         // 태그 계산기 쪽은 수동을 처리 해야 함 (데이터가 존재 하지 않음)
-        $charData = $this->curlController->getCURL("https://raw.githubusercontent.com/Kengxxiao/ArknightsGameData/master/ko_KR/gamedata/excel/character_table.json")['data'];
-        $skinData = $this->curlController->getCURL("https://raw.githubusercontent.com/Kengxxiao/ArknightsGameData/master/ko_KR/gamedata/excel/skin_table.json")['data'];
+        $charData = $this->curlController->getCURL("https://raw.githubusercontent.com/Kengxxiao/ArknightsGameData/master/ko_KR/gamedata/excel/character_table.json",[],[])['data'];
+        $skinData = $this->curlController->getCURL("https://raw.githubusercontent.com/Kengxxiao/ArknightsGameData/master/ko_KR/gamedata/excel/skin_table.json",[],[])['data'];
         
         /* 
         추가 세팅 해줘야 하는 것 : isRecruitment => false
@@ -187,7 +187,7 @@ class SetDataController extends Controller
             }
             $syncFailController = new SyncFailController();
             foreach($skinDiffArray as $skin) {
-                $avartarImg = $this->curlController->getCURL("https://raw.githubusercontent.com/Aceship/Arknight-Images/portraits/".$skin['avatarId'].".png");
+                $avartarImg = $this->curlController->getCURL("https://raw.githubusercontent.com/Aceship/Arknight-Images/portraits/".$skin['avatarId'].".png",[],[]);
                 // avatarId는 무조건 존재, 이미지 못찾으면 에러 판정
                 if($avartarImg['code'] == 404) {
                     $syncFailController->appendFailSync('char_skin','avatarId',$skin['avatarId'],SyncFailController::UPLOAD_IMAGE_RESOURCE_NOT_FOUND);
@@ -205,7 +205,7 @@ class SetDataController extends Controller
                 }
                 // portraitId 는 없을 수 있음 (토큰의 경우)
                 if($skin['portraitId'] !== null) {
-                    $portraitImg = $this->curlController->getCURL("https://raw.githubusercontent.com/Aceship/Arknight-Images/portraits/".$skin['portraitId'].".png");
+                    $portraitImg = $this->curlController->getCURL("https://raw.githubusercontent.com/Aceship/Arknight-Images/portraits/".$skin['portraitId'].".png",[],[]);
                     if($portraitImg['code'] == 404) {
                         $syncFailController->appendFailSync('char_skin','portraitId',$skin['portraitId'],SyncFailController::UPLOAD_IMAGE_RESOURCE_NOT_FOUND);
                     } else {
