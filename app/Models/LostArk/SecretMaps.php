@@ -26,7 +26,8 @@ class SecretMaps extends Model
             'lostark_item_information.item_grade',
             'lostark_item_information.item_icon',
             'lostark_market_price.now_price',
-            'lostark_secret_map_drop_item.map_id'
+            'lostark_secret_map_drop_item.map_id',
+            'lostark_secret_map_drop_item.drop_count'
         );
     }
 }
