@@ -50,4 +50,38 @@ class ItemInformationController extends Controller
             return 'alreay';
         }
     }
+
+    public function selectItemList(Request $request) {
+        $query = ItemInformation::select('*');
+
+        if($request->has('category')) {
+            $query = $query->where('lostark_item_information.category', $request->category);
+        }
+
+        if($request->has('item_name')) {
+            $query = $query->where('lostark_item_information.item_name','like','%'.$request->item_name.'%');
+        }
+
+        $query = $query->with([
+            'withMarketPrice'
+        ]);
+
+        // 페이지네이션 일단 안달고 전체 전부 호출하는 방향으로
+        return $query->get();
+        
+    }
+
+    // 생활 재료 화면용 API
+    public function lifeItemList(Request $request)
+    {
+        $request->merge(['category'=>90000]);
+        $lifeItemList = $this->selectItemList($request);
+        $customLifeItem = [
+
+        ];
+        foreach($lifeItemList as $lifeItem) {
+            $customLifeItem[$lifeItem->sub_category][] = $lifeItem;
+        }
+        return $customLifeItem;
+    }
 }

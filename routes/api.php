@@ -8,6 +8,7 @@ use App\Http\Controllers\Arknights\OperatorController;
 use App\Http\Controllers\Arknights\SetDataController;
 use App\Http\Controllers\Arknights\BuildingController;
 use App\Http\Controllers\Arknights\ItemsController;
+use App\Http\Controllers\LostArk\ItemInformationController;
 use App\Http\Controllers\LostArk\ItemInformationSettingController;
 use App\Http\Controllers\LostArk\SecretMapController;
 
@@ -26,8 +27,13 @@ use App\Http\Controllers\LostArk\SecretMapController;
 // Route::get('/test', [SetDataController::class, 'setCharSync']);
 
 Route::prefix('/lostark')->group(function() {
-    Route::prefix('/setting')->group(function() {
-        Route::get('/test', [SecretMapController::class, 'setDropItem']);
+    // Route::prefix('/setting')->group(function() {
+    //     Route::get('/test', [SecretMapController::class, 'setDropItem']);
+    // });
+
+    Route::prefix('/item')->group(function() {
+        Route::get('/list', [ItemInformationController::class, 'selectItemList']);
+        Route::get('/life/list', [ItemInformationController::class, 'lifeItemList']);
     });
 
     Route::prefix('/secret')->group(function() {
