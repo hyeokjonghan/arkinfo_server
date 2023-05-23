@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 class CURLController extends Controller
 {
-    public function getCURL($URL, $pathParam = []) {
+    public function getCURL($URL, $header, $pathParam = []) {
         $sendURL = $URL."?".http_build_query($pathParam,'',);
 
         $ch = curl_init();
@@ -16,12 +16,21 @@ class CURLController extends Controller
         curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 100);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
 
+        if(count($header) > 0) {
+            curl_setopt($ch, CURLOPT_HEADER, true);
+            curl_setopt($ch, CURLOPT_HTTPHEADER, $header);
+        }
+
         $response = curl_exec($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $headerSize = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+        $headerStr = substr($response, 0, $headerSize);
+        $bodyStr = substr($response, $headerSize);
         curl_close($ch);
 
         return [
-            'data'=>$response,
+            'data'=>$bodyStr,
+            'header'=>$headerStr,
             'code'=>$httpCode
         ];
     }
@@ -43,10 +52,14 @@ class CURLController extends Controller
 
         $response = curl_exec($ch);
         $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $headerSize = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+        $headerStr = substr($response, 0, $headerSize);
+        $bodyStr = substr($response, $headerSize);
 
         curl_close($ch);
         return [
-            'data'=>$response,
+            'data'=>$bodyStr,
+            'header'=>$headerStr,
             'code'=>$httpCode
         ];
     }
