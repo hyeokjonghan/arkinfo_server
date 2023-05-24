@@ -29,6 +29,7 @@ class ProduceItemController extends Controller
 
         $itemMatarialList = ItemMaterial::select('*')
         ->whereIn('target_item_code',$whereInTargetItemCode)
+        ->join('lostark_market_price', 'lostark_market_price.item_code', 'lostark_item_material.item_code')
         ->get();
 
         $targetItemMaterial = [];
