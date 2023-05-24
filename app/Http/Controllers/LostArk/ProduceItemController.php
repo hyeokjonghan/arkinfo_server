@@ -19,7 +19,6 @@ class ProduceItemController extends Controller
             'lostark_market_price.y_trade_count'
         )->join('lostark_market_price','lostark_produce_item.item_code','lostark_market_price.item_code')
         ->join('lostark_item_information','lostark_produce_item.item_code', 'lostark_item_information.item_code')
-        ->where('lostark_produce_item.produce_item_name','like','%오레하%')
         ->get();
         
         $whereInTargetItemCode = [];
