@@ -19,6 +19,7 @@ class ProduceItemController extends Controller
             'lostark_market_price.y_trade_count'
         )->join('lostark_market_price','lostark_produce_item.item_code','lostark_market_price.item_code')
         ->join('lostark_item_information','lostark_produce_item.item_code', 'lostark_item_information.item_code')
+        ->where('lostark_market_price.y_trade_count','>=',1000)
         ->get();
         
         $whereInTargetItemCode = [];
@@ -30,6 +31,7 @@ class ProduceItemController extends Controller
         $itemMatarialList = ItemMaterial::select('*')
         ->whereIn('target_item_code',$whereInTargetItemCode)
         ->join('lostark_market_price', 'lostark_market_price.item_code', 'lostark_item_material.item_code')
+        ->join('lostark_item_information','lostark_item_information.item_code', 'lostark_item_material.item_code')
         ->get();
 
         $targetItemMaterial = [];
