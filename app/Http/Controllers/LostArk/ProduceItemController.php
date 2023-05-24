@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\LostArk;
 
 use App\Http\Controllers\Controller;
+use App\Models\LostArk\ItemMaterial;
 use App\Models\LostArk\ItemProduceItem;
 use Illuminate\Http\Request;
 
@@ -11,15 +12,46 @@ class ProduceItemController extends Controller
     public function getMarketProduceItemList() {
         $query = ItemProduceItem::select(
             'lostark_produce_item.*',
+            'lostark_item_information.item_icon',
             'lostark_market_price.now_price',
             'lostark_market_price.now_avg_price',
             'lostark_market_price.bundle_count',
             'lostark_market_price.y_trade_count'
         )->join('lostark_market_price','lostark_produce_item.item_code','lostark_market_price.item_code')
-        ->with(['withItemMaterial'])
+        ->join('lostark_item_information','lostark_produce_item.item_code', 'lostark_item_information.item_code')
+        ->where('lostark_produce_item.produce_item_name','like','%오레하%')
+        ->get();
+        
+        $whereInTargetItemCode = [];
+        foreach($query as $produceItem) {
+            array_push($whereInTargetItemCode, $produceItem->item_code);
+        }
+
+
+        $itemMatarialList = ItemMaterial::select('*')
+        ->whereIn('target_item_code',$whereInTargetItemCode)
         ->get();
 
+        $targetItemMaterial = [];
+        foreach($itemMatarialList as $itemMaterial) {
+            $targetItemMaterial[$itemMaterial->target_item_code][] = $itemMaterial;
+        };
+
+        foreach($query as $produceItem) {
+            // with_item_material
+            $tempAppendArray = [];
+            if(isset($targetItemMaterial[$produceItem->item_code])) {
+                foreach($targetItemMaterial[$produceItem->item_code] as $material) {
+                    if($material->produce_type == $produceItem->produce_type) {
+                        array_push($tempAppendArray, $material);
+                    }
+                }
+            }
+            $produceItem['witt_item_material'] = $tempAppendArray;
+        }
+
         return $query;
+        // 쿼리 재편집으로 처리하자
     }
 
     // 추가 데이터 세팅
