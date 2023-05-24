@@ -12,6 +12,7 @@ class ItemProduceItem extends Model
     protected $primaryKey = "id";
     protected $fillable = [
         'item_code',
+        'production_number',
         'produce_item_name',
         'produce_type',
         'produce_cost',
