@@ -47,7 +47,7 @@ class ProduceItemController extends Controller
                     }
                 }
             }
-            $produceItem['witt_item_material'] = $tempAppendArray;
+            $produceItem['with_item_material'] = $tempAppendArray;
         }
 
         return $query;
