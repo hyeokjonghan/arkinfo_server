@@ -25,7 +25,7 @@ use App\Http\Controllers\LostArk\SecretMapController;
 */
 
 
-Route::get('/test', [SetDataController::class, 'setOperatorKey']);
+// Route::get('/test', [SetDataController::class, 'setOperatorKey']);
 
 Route::prefix('/lostark')->group(function() {
     Route::prefix('/setting')->group(function() {
@@ -44,7 +44,7 @@ Route::prefix('/lostark')->group(function() {
 });
 
 Route::prefix('/recruitment')->group(function() {
-    Route::get('/op/list',[OperatorController::class,'setCharSync']);
+    Route::get('/op/list',[OperatorController::class,'getRecruitmentOp']);
     Route::get('/tag/list',[RecruitmentTagController::class,'all']);
     
 });
