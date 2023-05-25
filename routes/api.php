@@ -25,7 +25,7 @@ use App\Http\Controllers\LostArk\SecretMapController;
 */
 
 
-Route::get('/test', [SetDataController::class, 'setItemSync']);
+Route::get('/test', [SetDataController::class, 'setOperatorKey']);
 
 Route::prefix('/lostark')->group(function() {
     Route::prefix('/setting')->group(function() {

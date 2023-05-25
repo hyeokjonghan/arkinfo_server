@@ -28,7 +28,7 @@ class SetDataController extends Controller
 
     public function setRange()
     {
-        $rangeData = $this->curlController->getCURL(env('AWS_CLOUDFRONT_S3_URL').'/gamedata/ko_KR/'.env('LAST_DATA_UPDATED').'/excel/range_table.json',[],[]);
+        $rangeData = $this->curlController->jsonGetCURL(env('AWS_CLOUDFRONT_S3_URL').'/gamedata/ko_KR/'.env('LAST_DATA_UPDATED').'/excel/range_table.json');
         $rangeData = $rangeData['data'];
         $rangeData = json_decode($rangeData, true);
         foreach($rangeData as $range) {
@@ -38,7 +38,7 @@ class SetDataController extends Controller
     }
 
     public function setSkill() {
-        $skillData = $this->curlController->getCURL(env('AWS_CLOUDFRONT_S3_URL').'/gamedata/ko_KR/'.env('LAST_DATA_UPDATED').'/excel/skill_table.json',[],[]);
+        $skillData = $this->curlController->jsonGetCURL(env('AWS_CLOUDFRONT_S3_URL').'/gamedata/ko_KR/'.env('LAST_DATA_UPDATED').'/excel/skill_table.json');
         $skillData = $skillData['data'];
         $skillData = json_decode($skillData, true);
         foreach($skillData as $skill) {
@@ -50,7 +50,7 @@ class SetDataController extends Controller
     }
 
     public function setCharterSkin() {
-        $skinData = $this->curlController->getCURL(env('AWS_CLOUDFRONT_S3_URL').'/gamedata/ko_KR/'.env('LAST_DATA_UPDATED').'/excel/skin_table.json',[],[]);
+        $skinData = $this->curlController->jsonGetCURL(env('AWS_CLOUDFRONT_S3_URL').'/gamedata/ko_KR/'.env('LAST_DATA_UPDATED').'/excel/skin_table.json');
         $skinData = $skinData['data'];
         $skinData = json_decode($skinData, true);
         $skinData = $skinData['charSkins'];
@@ -61,7 +61,7 @@ class SetDataController extends Controller
     }
 
     public function setItem() {
-        $itemData = $this->curlController->getCURL(env('AWS_CLOUDFRONT_S3_URL').'/gamedata/ko_KR/'.env('LAST_DATA_UPDATED').'/excel/item_table.json',[],[]);
+        $itemData = $this->curlController->jsonGetCURL(env('AWS_CLOUDFRONT_S3_URL').'/gamedata/ko_KR/'.env('LAST_DATA_UPDATED').'/excel/item_table.json');
         $itemData = $itemData['data'];
         $itemData = json_decode($itemData, true);
         $itemData = $itemData['items'];
@@ -175,6 +175,7 @@ class SetDataController extends Controller
         */ 
         $nowCharData = Operators::count();
         $charData = json_decode($charData, true);
+
         $allSkinData = CharSkin::select('skinId')->get();;
         $skinData = json_decode($skinData, true)['charSkins'];
         
@@ -229,7 +230,7 @@ class SetDataController extends Controller
                 }
             }
 
-            return $skinDiffArray;
+            // return $skinDiffArray;
         }
         
         // 스킨 정보 처리 완료
