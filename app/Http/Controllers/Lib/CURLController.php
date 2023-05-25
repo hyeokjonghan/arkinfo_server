@@ -27,6 +27,7 @@ class CURLController extends Controller
         $headerStr = substr($response, 0, $headerSize);
         $bodyStr = substr($response, $headerSize);
         curl_close($ch);
+        return $response;
 
         return [
             'data'=>$bodyStr,
@@ -60,6 +61,23 @@ class CURLController extends Controller
         return [
             'data'=>$bodyStr,
             'header'=>$headerStr,
+            'code'=>$httpCode
+        ];
+    }
+
+    public function jsonGetCURL($URL) {
+        $sendURL = $URL;
+
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $sendURL);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 100);
+        curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
+        $response = curl_exec($ch);
+        $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+        $response = curl_exec($ch);
+        return [
+            'data'=>$response,
             'code'=>$httpCode
         ];
     }
