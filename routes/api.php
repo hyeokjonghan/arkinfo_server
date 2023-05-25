@@ -28,9 +28,9 @@ use App\Http\Controllers\LostArk\SecretMapController;
 // Route::get('/test', [SetDataController::class, 'setCharSync']);
 
 Route::prefix('/lostark')->group(function() {
-    // Route::prefix('/setting')->group(function() {
-    //     Route::get('/test', [ProduceItemController::class, 'appendProduceItemInit']);
-    // });
+    Route::prefix('/setting')->group(function() {
+        Route::get('/test', [ItemInformationSettingController::class, 'jewelPriceSync']);
+    });
 
     Route::prefix('/item')->group(function() {
         Route::get('/list', [ItemInformationController::class, 'selectItemList']);

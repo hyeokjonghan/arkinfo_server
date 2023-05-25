@@ -84,4 +84,48 @@ class ItemInformationController extends Controller
         }
         return $customLifeItem;
     }
+
+    public function setItem($itemInfo) {
+        // $checkItemInfo
+        $checkItemInfo = ItemInformation::where('item_code', $itemInfo['Id'])->get();
+
+        // 없으면 추가
+        if(count($checkItemInfo) == 0) {
+            $insertData = [
+                'item_code'=>$itemInfo['Id'],
+                'item_name'=>$itemInfo['Name'],
+                'item_grade'=>$itemInfo['Grade'],
+                'item_icon'=>$itemInfo['Icon']
+            ];
+            $itemInformation = new ItemInformation($insertData);
+            $itemInformation->save();
+        }
+
+        // MarketPrice
+        $checkMarketPriceInfo = ItemMarketPrice::where('item_code', $itemInfo['Id'])->get();
+        if(count($checkMarketPriceInfo) == 0) {
+            $insertMarketPriceInfo = [
+                'item_code'=>$itemInfo['Id'],
+                'now_price'=>$itemInfo['RecentPrice'],
+                'now_avg_price'=>$itemInfo['YDayAvgPrice'],
+                'bundle_count'=>$itemInfo['BundleCount'],
+                'y_trade_count'=>0
+            ];
+            $newItemMarketPrice = new ItemMarketPrice($insertMarketPriceInfo);
+            $newItemMarketPrice->save();
+        } else {
+            $itemInformationSettingController = new ItemInformationSettingController();
+            $itemStatus = $itemInformationSettingController->getMarketItem($itemInfo['Id']);
+            $tradeCount = 0;
+            if(isset($itemStatus[0]["Stats"][1]['TradeCount'])) {
+                $tradeCount = $itemStatus[0]['Stats'][1]['TradeCount'];
+            }
+            $updateData = [
+                'now_price'=>$itemInfo['RecentPrice'],
+                'now_avg_price'=>$itemInfo['YDayAvgPrice'],
+                'y_trade_count'=>$tradeCount
+            ];
+            ItemMarketPrice::where('item_code', $itemInfo['Id'])->update($updateData);
+        }
+    }
 }

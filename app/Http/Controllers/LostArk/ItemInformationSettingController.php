@@ -16,6 +16,10 @@ class ItemInformationSettingController extends Controller
     const BATTLE_ITEM_INVEN = 30411;
     const SPECIAL_ITEM_INVEN = 30700;
 
+    const ENFORCE_MARKET_CATEGORY = 50000;
+    const BATTLE_MARKET_CATEGORY = 60000;
+    const LIFE_MARKET_CATEGORY = 90000;
+
     public function marketSearch($searchOption)
     {
         $curlController = new CURLController();
@@ -91,7 +95,7 @@ class ItemInformationSettingController extends Controller
     }
 
     // 보석 초기 데이터 세팅
-    public function defaultJualyInit()
+    public function defaultJewelInit()
     {
         $first = new ItemInformation([
             'item_code' => 65021010,
@@ -102,7 +106,7 @@ class ItemInformationSettingController extends Controller
         $first->save();
 
         $second = new ItemInformation([
-            'item_code' => 65021010,
+            'item_code' => 65022010,
             'item_name' => "1레벨 홍염의 보석",
             'item_grade' => "고급",
             'item_icon' => "https://cdn-lostark.game.onstove.com/EFUI_IconAtlas/Use/Use_9_56.png"
@@ -238,5 +242,66 @@ class ItemInformationSettingController extends Controller
         }
 
         return $battleItemData;
+    }
+
+    // 데이터 갱신 및 추가 데이터 세팅
+    public function syncItemData($categoryCode = 90000) {
+        $itemInformationController = new ItemInformationController();
+        $itemData = [];
+        $pageNo = 1;
+        $searchBool = true;
+        while($searchBool) {
+            $searchOption = [
+                "Sort"=>"GRADE",
+                "CategoryCode"=>$categoryCode,
+                "PageNo"=>$pageNo,
+                "SortCondition"=>"ASC"
+            ];
+
+            $itemSearchData = $this->marketSearch($searchOption);
+            $itemSearchData = json_decode($itemSearchData['data'], true)['Items'];
+            if(count($itemSearchData) > 0) {
+                $itemData = array_merge($itemData, $itemSearchData);
+                $pageNo++;
+            } else {
+                $searchBool = false;
+            }   
+        }
+
+        for($i = 0; $i < count($itemData); $i++) {
+            $itemInformationController->setItem($itemData[$i]);
+        }
+
+        return 'success';
+    }
+
+    // 보석 가격 최신화
+    public function jewelPriceSync() {
+        $searchOption = [
+            "Sort"=>"BUY_PRICE",
+            "CategoryCode"=>210000,
+            "ItemTier"=>3,
+            "ItemName"=>"홍염",
+            "PageNo"=>1,
+            "SortCondition"=>"ASC"
+        ];
+        $itemInfo = json_decode($this->auctionSearch($searchOption)['data'],true)['Items'];
+        if(count($itemInfo) > 0) {
+            ItemMarketPrice::where('item_code',65022010)->update(['now_price'=>$itemInfo[0]['AuctionInfo']['BuyPrice']]);
+        }
+        
+        $searchOption = [
+            "Sort"=>"BUY_PRICE",
+            "CategoryCode"=>210000,
+            "ItemTier"=>3,
+            "ItemName"=>"멸화",
+            "PageNo"=>1,
+            "SortCondition"=>"ASC"
+        ];
+
+        $itemInfo = json_decode($this->auctionSearch($searchOption)['data'],true)['Items'];
+        if(count($itemInfo) > 0) {
+            ItemMarketPrice::where('item_code',65021010)->update(['now_price'=>$itemInfo[0]['AuctionInfo']['BuyPrice']]);
+        }
     }
 }
