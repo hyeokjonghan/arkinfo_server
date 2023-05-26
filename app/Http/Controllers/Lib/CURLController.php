@@ -27,7 +27,6 @@ class CURLController extends Controller
         $headerStr = substr($response, 0, $headerSize);
         $bodyStr = substr($response, $headerSize);
         curl_close($ch);
-        return $response;
 
         return [
             'data'=>$bodyStr,
