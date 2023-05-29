@@ -13,6 +13,7 @@ class ProduceItemController extends Controller
         $query = ItemProduceItem::select(
             'lostark_produce_item.*',
             'lostark_item_information.item_icon',
+            'lostark_item_information.item_grade',
             'lostark_market_price.now_price',
             'lostark_market_price.now_avg_price',
             'lostark_market_price.bundle_count',
