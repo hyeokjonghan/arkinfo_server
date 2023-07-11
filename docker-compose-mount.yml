@@ -1,0 +1,7 @@
+version: '3'
+services:
+  test:
+    image: arkinfo
+    volumes:
+      - C:\\Users\\jjong\\arknight-info\\.env:/app/arkinfo_server/.env
+      - C:\\Users\\jjong\\arknight-info\\default:/etc/nginx/sites-enabled/default
